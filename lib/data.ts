@@ -25,6 +25,16 @@ export type User = {
   did?: string | null;
 };
 
+type UpdateUserInput = {
+  userId: string;
+  companyId: string;
+  name: string;
+  extension: string;
+  email: string;
+  outboundCallerId: string;
+  did: string;
+};
+
 /* COMPANIES
    ------------------------------------------------------------------ */
 
@@ -74,6 +84,21 @@ export async function getCompanyUsers(
   }
 
   return { active, pending, deleted };
+}
+
+export async function getUserById(userId: string): Promise<User | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error loading user by id:", error);
+    return null;
+  }
+
+  return (data as User) || null;
 }
 
 /* USERS - WRITE HELPERS
@@ -221,6 +246,32 @@ export async function rejectPendingUser(userId: string): Promise<void> {
     console.error("Error rejecting user:", error);
     throw new Error("Failed to reject user.");
   }
+}
+
+export async function updateUser(
+  input: UpdateUserInput
+): Promise<{ success: boolean; error?: string }> {
+  const { userId, companyId, name, extension, email, outboundCallerId, did } =
+    input;
+
+  const { error } = await writeClient
+    .from("users")
+    .update({
+      name: name || null,
+      extension: extension || null,
+      email: email || null,
+      outbound_caller_id: outboundCallerId || null,
+      did: did || null,
+    })
+    .eq("id", userId)
+    .eq("company_id", companyId);
+
+  if (error) {
+    console.error("Error updating user:", error);
+    return { success: false, error: "Failed to update user." };
+  }
+
+  return { success: true };
 }
 
 /* CSV IMPORT
