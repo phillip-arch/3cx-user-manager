@@ -21,7 +21,13 @@ import { redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{ companyId: string }>;
-  searchParams?: Promise<{ search?: string }>;
+  searchParams?: Promise<{
+    search?: string;
+    userMsg?: string;
+    userError?: string;
+    approveMsg?: string;
+    import?: string;
+  }>;
 };
 
 async function getCurrentSessionRole(): Promise<"admin" | "editor" | "guest"> {
