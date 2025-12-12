@@ -73,7 +73,7 @@ async function addUserAction(formData: FormData) {
   const result = await addUserWithValidation({
     companyId,
     name,
-    extension: extension || undefined,
+    extension: extension || "",
     email: email || null,
     outboundCallerId: outbound || null,
     did: did || null,
