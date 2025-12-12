@@ -104,7 +104,7 @@ export default async function CompaniesPage() {
 
       return {
         ...c,
-        reviewCount: (pendingCount || 0) + (deletedCount || 0),
+        reviewCount: (pendingCount ?? 0) + (deletedCount ?? 0),
       };
     })
   );
