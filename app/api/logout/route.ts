@@ -13,7 +13,8 @@ function clearSessionCookie(res: NextResponse) {
 
 export async function POST(req: NextRequest) {
   const redirectUrl = new URL("/login", req.url);
-  const res = NextResponse.redirect(redirectUrl);
+  // Use 303 to force the redirected request to be GET (avoid 405 on /login)
+  const res = NextResponse.redirect(redirectUrl, { status: 303 });
   clearSessionCookie(res);
   return res;
 }
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
 // Convenience for GET (clicking the route directly)
 export async function GET(req: NextRequest) {
   const redirectUrl = new URL("/login", req.url);
-  const res = NextResponse.redirect(redirectUrl);
+  const res = NextResponse.redirect(redirectUrl, { status: 303 });
   clearSessionCookie(res);
   return res;
 }
