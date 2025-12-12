@@ -74,9 +74,9 @@ async function addUserAction(formData: FormData) {
     companyId,
     name,
     extension: extension || undefined,
-    email: email || undefined,
-    outboundCallerId: outbound || undefined,
-    did: did || undefined,
+    email: email || null,
+    outboundCallerId: outbound || null,
+    did: did || null,
     status,
   });
 
@@ -1359,4 +1359,3 @@ export default async function CompanyUsersPage(props: Props) {
     </div>
   );
 }
-
